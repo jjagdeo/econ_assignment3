@@ -1,0 +1,59 @@
+---
+title: "econ_assignment3"
+author: "Jessica Jagdeo"
+date: "May 13, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, output = FALSE, load necessary packages and read in the data}
+
+library(tidyverse)
+
+library(stargazer)
+
+library(corrplot)
+
+whale_data <- read_csv("HW3Data.csv")
+
+```
+
+```{r, explore relationships between variables}
+
+variable_graph <- ggplot(whale_data, aes(x = risk, y = bid)) +
+  geom_point(aes(color = age), alpha = 0.5) +
+  facet_wrap(~income)
+
+variable_graph
+
+# This graph makes no sense, but we are told to do a linear probability analysis, so that's what we'll do.
+
+cor_whales <- cor(whale_data[1:4])
+
+corrplot(cor_whales,
+         type = "upper",
+         method = "ellipse",
+         tl.col = "black",
+         tl.cex = 0.5)
+
+# I don't know what this correlation plot tells us, but here it is.
+
+```
+
+Binomial logistic regression
+1 = Votes yes
+0 = Votes no
+    
+```{r, do the binary logistic regression}
+
+whales_blr <- glm(vote ~ risk + bid + NEP + income + age, family = "binomial", data = whale_data)
+
+summary(whales_blr)
+
+
+
+```
+
