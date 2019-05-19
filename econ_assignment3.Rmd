@@ -15,45 +15,23 @@ library(tidyverse)
 
 library(stargazer)
 
-library(corrplot)
-
 whale_data <- read_csv("HW3Data.csv")
 
 ```
 
-```{r, explore relationships between variables}
-
-variable_graph <- ggplot(whale_data, aes(x = risk, y = bid)) +
-  geom_point(aes(color = age), alpha = 0.5) +
-  facet_wrap(~income)
-
-variable_graph
-
-# This graph makes no sense, but we are told to do a linear probability analysis, so that's what we'll do.
-
-cor_whales <- cor(whale_data[1:4])
-
-corrplot(cor_whales,
-         type = "upper",
-         method = "ellipse",
-         tl.col = "black",
-         tl.cex = 0.5)
-
-# I don't know what this correlation plot tells us, but here it is.
-
-```
-
-Binomial logistic regression
+Linear regression
 1 = Votes yes
 0 = Votes no
     
-```{r, do the binary logistic regression}
+```{r, do the linear regression}
 
-whales_blr <- glm(vote ~ risk + bid + NEP + income + age, family = "binomial", data = whale_data)
+whales_lm <- lm(vote ~ risk + bid + NEP + income + age, data = whale_data)
 
-summary(whales_blr)
-
+summary(whales_lm)
 
 
 ```
 
+votingyes = 0.1196977 + 0.0007445(risk) + -0.0010699(bid) + 0.0158639(NEP) + 0.0088282(incomeone_percent) +  0.0027386(incomepoor) + 0.0074891(incomerich) + 0.0467922(incomevery_rich) +  0.0099816(agetofifty) + -0.0201190 (agetoforty) +  -0.0162261(agetosixty) + 0.0204401(agetothirty)
+
+If everything is held constant, 
