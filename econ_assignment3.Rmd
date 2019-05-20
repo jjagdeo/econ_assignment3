@@ -32,6 +32,55 @@ summary(whales_lm)
 
 ```
 
+###1
+
+Equation:
+
 votingyes = 0.1196977 + 0.0007445(risk) + -0.0010699(bid) + 0.0158639(NEP) + 0.0088282(incomeone_percent) +  0.0027386(incomepoor) + 0.0074891(incomerich) + 0.0467922(incomevery_rich) +  0.0099816(agetofifty) + -0.0201190 (agetoforty) +  -0.0162261(agetosixty) + 0.0204401(agetothirty)
 
-If everything is held constant, 
+Interpretations:
+
+If everything is held constant, with every percent increase in risk reduction level, a person is about 0.07 times more likely to vote yes. 
+
+###2
+
+Equation:
+
+0.0010699(bid) = 0.1196977 + 0.714votingyes + 0.0007445(risk) + 0.0158639(NEP) + 0.0088282(incomeone_percent) +  0.0027386(incomepoor) + 0.0074891(incomerich) + 0.0467922(incomevery_rich) +  0.0099816(agetofifty) + -0.0201190 (agetoforty) +  -0.0162261(agetosixty) + 0.0204401(agetothirty)
+
+
+0.0010699(bid) = 0.1196977 + 0.714 + 0.0007445(risk) 
+
+```{r}
+
+#Bid when risk = 0:
+
+bidzero <- (0.1196977 + 0.714 + 0.0007445*0)/0.0010699
+
+#Bid when risk = 4:
+
+bidfour <- (0.1196977 + 0.714 + (0.0007445*4))/0.0010699
+
+bidfour-bidzero
+
+
+```
+
+###3
+
+```{r}
+
+# Bid/estimated WTP for the 30th respondent using a 60% risk reduction level (voted no):
+
+(0.1196977 + 0.714 + (0.0007445*60) + (0.0158639*25) + (0.0088282*1) - (0.0201190*1))/0.0010699 
+
+# Estimated WTP for the 60th respondent using a 60% risk reduction level (voted yes):
+
+(0.1196977 + 0.714 + (0.0007445*60) + (0.0158639*42) + (0.0088282*1) + (0.0099816*1))/0.0010699 
+
+# Estimated WTP for the 90th respondent using a 60% risk reduction level (voted no):
+
+(0.1196977 + 0.714 + (0.0007445*60) + (0.0158639*46) + (0.0099816*1))/0.0010699
+
+```
+
