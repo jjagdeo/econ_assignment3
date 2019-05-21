@@ -2,56 +2,94 @@
 title: "econ_assignment3"
 author: "Jessica Jagdeo"
 date: "May 13, 2019"
-output: html_document
+output:
+  html_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, output = FALSE, load necessary packages and read in the data}
+```{r, include = FALSE}
+
+# Load necessary packages and read in the data
 
 library(tidyverse)
 
 library(stargazer)
 
+library(kableExtra)
+
 whale_data <- read_csv("HW3Data.csv")
 
 ```
 
-Linear regression
-1 = Votes yes
-0 = Votes no
+
+**Model**: whales_lm <- lm(vote ~ risk + bid + NEP + income + age, data = whale_data)
     
-```{r, do the linear regression}
+```{r, include = FALSE}
 
 whales_lm <- lm(vote ~ risk + bid + NEP + income + age, data = whale_data)
 
 summary(whales_lm)
 
+#Linear regression
+#1 = Votes yes
+#0 = Votes no
+
 
 ```
 
-###1
+```{r, results = 'asis', echo = FALSE}
 
-Equation:
+stargazer(whales_lm,
+          type = "html",
+          align = TRUE,
+          title = "**Table 1. Multivariate Linear Regression for Respondent Preferences for a Vessel Speed Reduction Program.** Results of the multivariate linear regression of Santa Barbara County residents preference to implement a vessel spped reduction program to reduce the risk of whale deaths in the channel based on risk reduction, annual payment for the household, measure of environmental concern, income, and age.",
+          covariate.labels = c("Risk Reduction Level", "Annual Payment for Household", "Environmental Concern", "One Percent (income)", "Poor (income)", "Rich (income)", "Very Rich (income)", "Age to Fifty", "Age to Forty", "Age to Sixty", "Age to Thirty"),
+          dep.var.labels=c("Voting Yes"),
+          single.row = TRUE
+          )
+```
 
-votingyes = 0.1196977 + 0.0007445(risk) + -0.0010699(bid) + 0.0158639(NEP) + 0.0088282(incomeone_percent) +  0.0027386(incomepoor) + 0.0074891(incomerich) + 0.0467922(incomevery_rich) +  0.0099816(agetofifty) + -0.0201190 (agetoforty) +  -0.0162261(agetosixty) + 0.0204401(agetothirty)
+####1
 
-Interpretations:
+**Linear Regression Equation**:
 
-If everything is held constant, with every percent increase in risk reduction level, a person is about 0.07 times more likely to vote yes. 
+*Voting Yes = 0.1196977 + 0.0007445(Risk Reduction Level) + -0.0010699(Annual Payment for Household) + 0.0158639(Environmental Concern) + 0.0088282(One Percent) +  0.0027386(Poor) + 0.0074891(Rich) + 0.0467922(Very Rich) +  0.0099816(Age to Fifty) + -0.0201190 (Age to Forty) +  -0.0162261(Age to Sixty) + 0.0204401(Age to Thirty)*
 
-###2
+**Interpretations**:
 
-Equation:
+If everything is held constant, with every unit increase in risk reduction level, a person's probability/likelihood of voting yes will change by about 0.07. 
 
-0.0010699(bid) = 0.1196977 - 0.714votingyes + 0.0007445(risk) + 0.0158639(NEP) + 0.0088282(incomeone_percent) +  0.0027386(incomepoor) + 0.0074891(incomerich) + 0.0467922(incomevery_rich) +  0.0099816(agetofifty) + -0.0201190 (agetoforty) +  -0.0162261(agetosixty) + 0.0204401(agetothirty)
+If everything is held constant, with every unit increase in annual payment for household, a person's probability of voting yes will decrease by about 0.1.
 
+If everything is held constant, for a person within the one percent income category, that person's probability of voting yes will increase by about 0.8 in comparison to a person with a middle class income. 
 
-0.0010699(bid) = 0.1196977 - 0.714 + 0.0007445(risk) 
+If everything is held constant, for a person within the age to sixty category, that person's probability of voting yes will decrease by about 0.1 in comparison to a person within the age over sixty category. 
 
-```{r}
+####2
+
+**Equation to determine willingness to pay**:
+
+*(Willingness to Pay) = [0.1196977 - 0.714 + 0.0007445(Risk Reduction Level) + 0.0158639(Environmental Concern) + 0.0088282(One Percent) +  0.0027386(Poor) + 0.0074891(Rich) + 0.0467922(Very Rich) +  0.0099816(Age to Fifty) + -0.0201190 (Age to Forty) +  -0.0162261(Age to Sixty) + 0.0204401(Age to Thirty)]/0.0010699*
+
+*0.714 is the average of the voting column
+
+*(Willingness to Pay) = [0.1196977 - 0.714 + 0.0007445(Risk Reduction Level)]/0.0010699* 
+
+Willingness to pay when risk reduction level = 0:
+
+(0.1196977 - 0.714 + 0.0007445*0)/0.0010699 = -555.475
+
+Willingness to pay when risk reduction level = 4:
+
+(0.1196977 - 0.714 + (0.0007445*4))/0.0010699 = -552.691
+
+The value of a single prevented whale death is **$2.78**.
+
+```{r, include = FALSE}
 
 #Bid when risk = 0:
 
@@ -66,28 +104,50 @@ bidfour-bidzero
 
 ```
 
-###3
+####3
 
-```{r}
+```{r, include = FALSE}
 
 # Bid/estimated WTP for the 30th respondent using a 60% risk reduction level (voted no) NEP=25, income=1percent, age=toforty:
 
-(0.1196977 - 0.714 + (0.0007445*60) + (0.0158639*25) + (0.0088282*1) - (0.0201190*1))/0.0010699 
+one <- (0.1196977 - 0.714 + (0.0007445*60) + (0.0158639*25) + (0.0088282*1) - (0.0201190*1))/0.0010699 # -153
 
 # Estimated WTP for the 60th respondent using a 60% risk reduction level (voted yes) NEP=42, income=1percent, age=tofifty:
 
-(0.1196977 - 0.714 + (0.0007445*60) + (0.0158639*42) + (0.0088282*1) + (0.0099816*1))/0.0010699 
+two <- (0.1196977 - 0.714 + (0.0007445*60) + (0.0158639*42) + (0.0088282*1) + (0.0099816*1))/0.0010699 # 126
 
 # Estimated WTP for the 90th respondent using a 60% risk reduction level (voted no) NEP=46, income=middle, age=tofifty:
 
-(0.1196977 - 0.714 + (0.0007445*60) + (0.0158639*46) + (0.0099816*1))/0.0010699
+three <- (0.1196977 - 0.714 + (0.0007445*60) + (0.0158639*46) + (0.0099816*1))/0.0010699 # 177
+
+
+```
+
+```{r, echo = FALSE}
+
+respondentwtp <- data.frame(one, two, three) %>% 
+  gather("Respondents", "Willingness to Pay ($)") %>% 
+  kable(caption = "Table 2. Three Respondents' Willingness to Pay. The first respondent chosen (denoted one in the table) to determine willingness of pay had a NEP of 25 and belonged to the one percent and to forty income and age categories, respectively. The second respondent had a NEP of 42 and belonged to the one percent and to fifty income and age categories. Lastly, the third respondent had a NEP of 46 and belonged to the middle and to fifty income and age categories. ") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = FALSE)
+
+respondentwtp
 
 ```
 
 
+####4 Determining average WTP
 
-###4 Determining average WTP
-```{r}
+To determine average willingness to pay, we used the equation:
+
+*WTP =  (0.1196977 - 0.714 + (0.0007445*60) + (0.0158639*38.366) + 0.0088282 + 0.0204401)/0.0010699*,
+
+where 60 is the risk reduction level and 38.366 is the mean of NEP. The mode for the age category is to thirty and the mode for the income category is one percent. 
+
+Based on this calculation, the average willingness to pay for a VSR program offering 60% risk
+reduction among Santa Barbara County households is $82.50.
+
+```{r, include = FALSE}
+
 mean(whale_data$NEP) #38.366
 
 income_counts<-whale_data %>% 
@@ -105,30 +165,41 @@ age_counts
 
 ```
 
-###5 Total Benefits of VSR program (to 150,000 households)
-```{r}
+####5 Total Benefits of VSR program (to 150,000 households)
 
-(82.5034*150000)-7000000 #5,375,510
+Total Benefits = ($82.50) * (150,000 households) = $12,375,510
+
+```{r, include = FALSE}
+
+(82.5034*150000) #5,375,510
 
 ```
+####6 Benefits vs. Costs
+
+The total benefits of this program are $12,375,510, whereas the total costs are $7 million, so the benefits outweight the costs by approximately $5,000,000.
 
 
+####7
 
-###6
-Yes, the benefits outweigh the costs by approximately $5,000,000
+At a price of $50 per ton, the shipping industry will decide to adopt the VSR for purely self-interested reasons because this carbon credit will cover the cost associated with reducing the vessel's speed to meet the VSR program regulations. 
 
+```{r, include = FALSE}
 
-###7
-```{r}
 #1000 is the cost of implementing the VSR but will result in 20 fewer tons of CO2 emitted per transit
 
 1000/20 #$50 per ton of CO2 is Z*, market equilibrium
 ```
 
 
-###8
-15 whales per year would be saved. The social value of saving 15 whales per year would be $41.70 per year.
-```{r}
+####8
+
+If the carbon credit price is exactly $50 per ton and all ships voluntarily reduce speed to
+achieve the 60% risk reduction, 15 whales per year would be saved. The social value of saving 15 whales per year would be $41.70 per year 
+= (value of a whale) * (total whales saved)
+= ($2.78)*(15 whales)
+= $41.70
+
+```{r, include = FALSE}
 
 2.78*15
 
