@@ -46,7 +46,7 @@ If everything is held constant, with every percent increase in risk reduction le
 
 Equation:
 
-0.0010699(bid) = 0.1196977 + 0.714votingyes + 0.0007445(risk) + 0.0158639(NEP) + 0.0088282(incomeone_percent) +  0.0027386(incomepoor) + 0.0074891(incomerich) + 0.0467922(incomevery_rich) +  0.0099816(agetofifty) + -0.0201190 (agetoforty) +  -0.0162261(agetosixty) + 0.0204401(agetothirty)
+0.0010699(bid) = 0.1196977 - 0.714votingyes + 0.0007445(risk) + 0.0158639(NEP) + 0.0088282(incomeone_percent) +  0.0027386(incomepoor) + 0.0074891(incomerich) + 0.0467922(incomevery_rich) +  0.0099816(agetofifty) + -0.0201190 (agetoforty) +  -0.0162261(agetosixty) + 0.0204401(agetothirty)
 
 
 0.0010699(bid) = 0.1196977 + 0.714 + 0.0007445(risk) 
@@ -70,17 +70,68 @@ bidfour-bidzero
 
 ```{r}
 
-# Bid/estimated WTP for the 30th respondent using a 60% risk reduction level (voted no):
+# Bid/estimated WTP for the 30th respondent using a 60% risk reduction level (voted no) NEP=25, income=1percent, age=toforty:
 
-(0.1196977 + 0.714 + (0.0007445*60) + (0.0158639*25) + (0.0088282*1) - (0.0201190*1))/0.0010699 
+(0.1196977 - 0.714 + (0.0007445*60) + (0.0158639*25) + (0.0088282*1) - (0.0201190*1))/0.0010699 
 
-# Estimated WTP for the 60th respondent using a 60% risk reduction level (voted yes):
+# Estimated WTP for the 60th respondent using a 60% risk reduction level (voted yes) NEP=42, income=1percent, age=tofifty:
 
-(0.1196977 + 0.714 + (0.0007445*60) + (0.0158639*42) + (0.0088282*1) + (0.0099816*1))/0.0010699 
+(0.1196977 - 0.714 + (0.0007445*60) + (0.0158639*42) + (0.0088282*1) + (0.0099816*1))/0.0010699 
 
-# Estimated WTP for the 90th respondent using a 60% risk reduction level (voted no):
+# Estimated WTP for the 90th respondent using a 60% risk reduction level (voted no) NEP=46, income=middle, age=tofifty:
 
-(0.1196977 + 0.714 + (0.0007445*60) + (0.0158639*46) + (0.0099816*1))/0.0010699
+(0.1196977 - 0.714 + (0.0007445*60) + (0.0158639*46) + (0.0099816*1))/0.0010699
+
+```
+
+
+
+###4 Determining average WTP
+```{r}
+mean(whale_data$NEP) #38.366
+
+income_counts<-whale_data %>% 
+  count(income)
+
+income_counts
+
+age_counts<-whale_data %>% 
+  count(age)
+
+age_counts
+
+ (0.1196977 - 0.714 + (0.0007445*60) + (0.0158639*38.366) + 0.0088282 + 0.0204401)/0.0010699 #82.5034
+
+
+```
+
+###5 Total Benefits of VSR program (to 150,000 households)
+```{r}
+
+(82.5034*150000)-7000000 #5,375,510
+
+```
+
+
+
+###6
+Yes, the benefits outweigh the costs by approximately $5,000,000
+
+
+###7
+```{r}
+#1000 is the cost of implementing the VSR but will result in 20 fewer tons of CO2 emitted per transit
+
+1000/20 #$50 per ton of CO2 is Z*, market equilibrium
+```
+
+
+###8
+15 whales per year would be saved. The social value of saving 15 whales per year would be $41.70 per year.
+```{r}
+
+2.78*15
+
 
 ```
 
