@@ -61,9 +61,9 @@ stargazer(whales_lm,
 
 **Interpretations**:
 
-If everything is held constant, with every unit increase in risk reduction level, a person's probability/likelihood of voting yes will change by about 0.07. 
+If everything is held constant, with every percent increase in risk reduction level, a person's probability/likelihood of voting yes will change by about 0.07. 
 
-If everything is held constant, with every unit increase in annual payment for household, a person's probability of voting yes will decrease by about 0.1.
+If everything is held constant, with every dollar increase in annual payment for household, a person's probability of voting yes will decrease by about 0.1.
 
 If everything is held constant, for a person within the one percent income category, that person's probability of voting yes will increase by about 0.8 in comparison to a person with a middle class income. 
 
